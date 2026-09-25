@@ -10,6 +10,10 @@ public class PlayerController : MonoBehaviour
 
     public InputActionReference moveAction;
 
+    // Temporary speed boost / slowdown (used by mystery boxes)
+    private float speedMultiplier = 1f;
+    private float speedEffectEndTime;
+
     // Private variables 
     private Rigidbody2D rb; // Reference to the Rigidbody2D component attached to the player
     private Vector2 movement; // Stores the direction of player movement
@@ -30,6 +34,11 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
+        if (speedMultiplier != 1f && Time.time >= speedEffectEndTime)
+        {
+            speedMultiplier = 1f;
+        }
+
         // Get player input from keyboard or controller
         Vector2 moveInput = moveAction.action.ReadValue<Vector2>();
 
@@ -73,7 +82,13 @@ public class PlayerController : MonoBehaviour
     void FixedUpdate()
     {
         // Apply movement to the player in FixedUpdate for physics consistency
-        rb.linearVelocity = movement * speed;
+        rb.linearVelocity = movement * speed * speedMultiplier;
+    }
+
+    public void ApplySpeedMultiplier(float multiplier, float duration)
+    {
+        speedMultiplier = multiplier;
+        speedEffectEndTime = Time.time + duration;
     }
 
     void RotatePlayer(float x, float y)
