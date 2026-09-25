@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 // Spirit power. Press G to slip into spirit form for a few seconds: the player turns pale and
 // see-through, can walk through walls and moving railings, and is immune to powder keg blasts. Doors, the princess and barrels stay solid.
@@ -25,7 +26,7 @@ public class GhostMode : MonoBehaviour
     [Tooltip("Colour of the spirit form.")]
     public Color spiritColor = new Color(0.65f, 0.9f, 1f);
 
-    [Tooltip("Optional text that shows Ghost Mode status.")]
+    [Tooltip("Text that shows the spirit form status and uses left (e.g. 2/3). If empty, one is created in the bottom-left corner.")]
     public TMP_Text statusText;
 
     [Header("What the ghost can pass through")]
@@ -47,10 +48,12 @@ public class GhostMode : MonoBehaviour
 
     private void Awake()
     {
-        if (statusText != null)
+        if (statusText == null)
         {
-            TextBackdrop.Attach(statusText, 16f, 8f);
+            statusText = CreateStatusText();
         }
+
+        TextBackdrop.Attach(statusText, 16f, 8f);
 
         inventory = GetComponent<KeyInventory>();
         ChargesLeft = maxCharges;
@@ -214,6 +217,39 @@ public class GhostMode : MonoBehaviour
         return false;
     }
 
+    // Bottom-left corner text, so the counter shows even if nothing was set up in the scene
+    private TMP_Text CreateStatusText()
+    {
+        GameObject canvasGo = new GameObject("SpiritStatusCanvas");
+        canvasGo.transform.SetParent(transform, false);
+
+        Canvas canvas = canvasGo.AddComponent<Canvas>();
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        canvas.sortingOrder = 95;
+
+        CanvasScaler scaler = canvasGo.AddComponent<CanvasScaler>();
+        scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        scaler.referenceResolution = new Vector2(1920f, 1080f);
+
+        GameObject textGo = new GameObject("SpiritStatusText");
+        textGo.transform.SetParent(canvasGo.transform, false);
+
+        TextMeshProUGUI t = textGo.AddComponent<TextMeshProUGUI>();
+        t.fontSize = 32f;
+        t.fontStyle = FontStyles.Bold;
+        t.color = spiritColor;
+        t.alignment = TextAlignmentOptions.BottomLeft;
+        t.raycastTarget = false;
+
+        RectTransform rt = t.rectTransform;
+        rt.anchorMin = rt.anchorMax = new Vector2(0f, 0f);
+        rt.pivot = new Vector2(0f, 0f);
+        rt.anchoredPosition = new Vector2(40f, 40f);
+        rt.sizeDelta = new Vector2(700f, 50f);
+
+        return t;
+    }
+
     private void UpdateStatusText()
     {
         if (statusText == null)
@@ -221,24 +257,26 @@ public class GhostMode : MonoBehaviour
             return;
         }
 
+        string uses = $"{ChargesLeft}/{maxCharges}";
+
         if (IsGhost)
         {
             float left = Mathf.Max(0f, ghostEndTime - Time.time);
             statusText.text = waitingToLeaveWalls
-                ? "Spirit form: leave the wall!"
-                : $"Spirit form: {left:0.0}s";
+                ? $"Spirit form {uses} - leave the wall!"
+                : $"Spirit form {uses} - active {left:0.0}s";
         }
         else if (ChargesLeft <= 0)
         {
-            statusText.text = "Spirit form: no strength left";
+            statusText.text = $"Spirit form {uses} - no strength left";
         }
         else if (Time.time < nextAvailableTime)
         {
-            statusText.text = $"Spirit form ready in {nextAvailableTime - Time.time:0.0}s ({ChargesLeft} left)";
+            statusText.text = $"Spirit form {uses} - recovering {nextAvailableTime - Time.time:0.0}s";
         }
         else
         {
-            statusText.text = $"Spirit form ready (G) - {ChargesLeft} left";
+            statusText.text = $"Spirit form {uses} - ready (G)";
         }
     }
 
