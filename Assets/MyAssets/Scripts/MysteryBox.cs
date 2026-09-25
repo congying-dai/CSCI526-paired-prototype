@@ -50,14 +50,12 @@ public class MysteryBox : MonoBehaviour
             case Effect.FreeKey:
                 KeyColor color = (KeyColor)Random.Range(0, System.Enum.GetValues(typeof(KeyColor)).Length);
                 inventory.AddKey(color);
-                HUDMessage.Show($"Mystery Box: free {color} key!");
-                MysteryBoxEffects.PlayGood(boxPosition);
+                Report(true, boxPosition, $"You got a free {color} key!");
                 break;
 
             case Effect.SpeedBoost:
                 player.GetComponent<PlayerController>()?.ApplySpeedMultiplier(speedBoostMultiplier, speedEffectDuration);
-                HUDMessage.Show("Mystery Box: speed boost!");
-                MysteryBoxEffects.PlayGood(boxPosition);
+                Report(true, boxPosition, $"Speed boost for {speedEffectDuration:0} seconds!");
                 break;
 
             case Effect.GhostMode:
@@ -66,26 +64,38 @@ public class MysteryBox : MonoBehaviour
                 if (ghost != null)
                 {
                     ghost.Activate(ghostDuration);
-                    HUDMessage.Show("Mystery Box: Ghost Mode!");
-                    MysteryBoxEffects.PlayGood(boxPosition);
+                    Report(true, boxPosition, $"Ghost Mode for {ghostDuration:0} seconds!");
+                }
+                else
+                {
+                    Report(true, boxPosition, "Ghost Mode (not set up on the player)");
                 }
                 break;
 
             case Effect.Slowdown:
                 player.GetComponent<PlayerController>()?.ApplySpeedMultiplier(slowdownMultiplier, speedEffectDuration);
-                HUDMessage.Show("Mystery Box: slowed down!");
-                MysteryBoxEffects.PlayBad(boxPosition);
+                Report(false, boxPosition, $"Slowed down for {speedEffectDuration:0} seconds!");
                 break;
 
             case Effect.BackToStart:
-                MysteryBoxEffects.PlayBad(boxPosition);
-                PlayerRespawn respawn = player.GetComponent<PlayerRespawn>();
-
-                if (respawn != null)
-                {
-                    respawn.SendToStart();
-                }
+                Report(false, boxPosition, "Disaster! Back to the start!");
+                player.GetComponent<PlayerRespawn>()?.SendToStart();
                 break;
+        }
+    }
+
+    // Shows the result as text above the box (and on the HUD if there is one) and plays the good/bad effect.
+    private void Report(bool good, Vector3 position, string message)
+    {
+        HUDMessage.Show("Mystery Box: " + message);
+
+        if (good)
+        {
+            MysteryBoxEffects.PlayGood(position, message);
+        }
+        else
+        {
+            MysteryBoxEffects.PlayBad(position, message);
         }
     }
 }

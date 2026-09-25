@@ -1,18 +1,23 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 // Runtime visual effects for mystery boxes (no art assets needed).
 // Good result: golden sparkles float up. Bad result: red burst, dark debris and a camera shake.
 public class MysteryBoxEffects : MonoBehaviour
 {
-    public static void PlayGood(Vector3 position)
+    public static void PlayGood(Vector3 position, string message)
     {
-        Spawn(position).StartGood();
+        MysteryBoxEffects fx = Spawn(position);
+        fx.StartGood();
+        fx.ShowText(message, new Color(1f, 0.9f, 0.3f));
     }
 
-    public static void PlayBad(Vector3 position)
+    public static void PlayBad(Vector3 position, string message)
     {
-        Spawn(position).StartBad();
+        MysteryBoxEffects fx = Spawn(position);
+        fx.StartBad();
+        fx.ShowText(message, new Color(1f, 0.25f, 0.25f));
     }
 
     private static MysteryBoxEffects Spawn(Vector3 position)
@@ -32,6 +37,44 @@ public class MysteryBoxEffects : MonoBehaviour
         StartCoroutine(BadRoutine());
     }
 
+    // Floating world-space text that rises above the box and fades out.
+    private void ShowText(string message, Color color)
+    {
+        GameObject go = new GameObject("MysteryBoxText");
+        go.transform.SetParent(transform, false);
+        go.transform.localPosition = new Vector3(0f, 0.6f, 0f);
+
+        TextMeshPro text = go.AddComponent<TextMeshPro>();
+        text.text = message;
+        text.fontSize = 4f;
+        text.fontStyle = FontStyles.Bold;
+        text.alignment = TextAlignmentOptions.Center;
+        text.color = color;
+        text.outlineWidth = 0.25f;
+        text.outlineColor = Color.black;
+        text.sortingOrder = 40;
+        text.rectTransform.sizeDelta = new Vector2(8f, 2f);
+
+        StartCoroutine(AnimateText(text, color));
+    }
+
+    private IEnumerator AnimateText(TextMeshPro text, Color color)
+    {
+        const float life = 2f;
+        float time = 0f;
+        Vector3 start = text.transform.position;
+
+        while (time < life && text != null)
+        {
+            float p = time / life;
+            text.transform.position = start + Vector3.up * p * 0.8f;
+            // Stay fully visible for the first half, then fade
+            text.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(2f * (1f - p)));
+            time += Time.deltaTime;
+            yield return null;
+        }
+    }
+
     private IEnumerator GoodRoutine()
     {
         Color[] colors = { new Color(1f, 0.9f, 0.3f), Color.white, new Color(0.5f, 1f, 0.6f) };
@@ -48,7 +91,7 @@ public class MysteryBoxEffects : MonoBehaviour
             SpawnParticle(dir, colors[Random.Range(0, colors.Length)], size, size * 0.2f, Random.Range(0.6f, 1.1f), 0f);
         }
 
-        yield return new WaitForSeconds(1.3f);
+        yield return new WaitForSeconds(2.1f);
         Destroy(gameObject);
     }
 
@@ -67,7 +110,7 @@ public class MysteryBoxEffects : MonoBehaviour
         }
 
         yield return ShakeCamera(0.35f, 0.25f);
-        yield return new WaitForSeconds(0.6f);
+        yield return new WaitForSeconds(1.7f);
         Destroy(gameObject);
     }
 
