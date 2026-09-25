@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
 
-// A barrel that explodes after being shot. If the player is inside the blast
-// radius (and not in Ghost Mode) they are sent back to the start.
+// An old powder keg that explodes after being shot. If the player is inside the blast
+// radius (and not in spirit form) they are sent back to the start.
 public class ExplosiveBarrel : MonoBehaviour
 {
     [Header("Explosion")]
@@ -69,7 +69,7 @@ public class ExplosiveBarrel : MonoBehaviour
 
             if (ghost != null && ghost.IsGhost)
             {
-                HUDMessage.Show("Ghost Mode protected you from the explosion!");
+                HUDMessage.Show("The blast passes through your spirit form!");
             }
             else
             {

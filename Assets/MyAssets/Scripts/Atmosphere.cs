@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 
-// Stormy night atmosphere: dimmed scene, random lightning flashes, falling rain and a
+// Haunted castle in a storm: dimmed scene, random lightning flashes, falling rain and a
 // flickering torch around the player.
 //
 // It creates itself automatically when the scene starts, so no Unity setup is needed.
@@ -13,6 +13,9 @@ public class Atmosphere : MonoBehaviour
     [Header("Ambient light")]
     [Tooltip("Global light is multiplied by this to make the scene darker (1 = unchanged).")]
     [Range(0.1f, 1f)] public float darkness = 0.55f;
+
+    [Tooltip("Cold moonlight tint applied to the whole scene.")]
+    public Color moonlight = new Color(0.72f, 0.78f, 1f);
 
     [Header("Lightning")]
     public bool lightning = true;
@@ -35,6 +38,7 @@ public class Atmosphere : MonoBehaviour
 
     private Light2D globalLight;
     private float baseIntensity;
+    private Color baseColor;
     private Light2D torch;
     private float torchBaseIntensity = 0.9f;
 
@@ -66,6 +70,8 @@ public class Atmosphere : MonoBehaviour
         if (globalLight != null)
         {
             baseIntensity = globalLight.intensity;
+            baseColor = globalLight.color;
+            globalLight.color = moonlight;
             globalLight.intensity = baseIntensity * darkness;
 
             if (lightning)
@@ -263,6 +269,7 @@ public class Atmosphere : MonoBehaviour
         if (globalLight != null)
         {
             globalLight.intensity = baseIntensity;
+            globalLight.color = baseColor;
         }
     }
 }

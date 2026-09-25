@@ -3,8 +3,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-// Press G to become a ghost for a few seconds: the player turns see-through, can walk through
-// walls and moving railings, and is immune to explosions. Doors, the princess and barrels stay solid.
+// Spirit power. Press G to slip into spirit form for a few seconds: the player turns pale and
+// see-through, can walk through walls and moving railings, and is immune to powder keg blasts. Doors, the princess and barrels stay solid.
 [RequireComponent(typeof(PlayerRespawn))]
 public class GhostMode : MonoBehaviour
 {
@@ -17,6 +17,9 @@ public class GhostMode : MonoBehaviour
 
     [Header("Visuals")]
     [Range(0.1f, 1f)] public float ghostAlpha = 0.35f;
+
+    [Tooltip("Colour of the spirit form.")]
+    public Color spiritColor = new Color(0.65f, 0.9f, 1f);
 
     [Tooltip("Optional text that shows Ghost Mode status.")]
     public TMP_Text statusText;
@@ -106,13 +109,13 @@ public class GhostMode : MonoBehaviour
 
         if (spriteRenderer != null)
         {
-            Color c = originalColor;
+            Color c = spiritColor;
             c.a = ghostAlpha;
             spriteRenderer.color = c;
         }
 
         SoundEffects.Play(SoundEffects.Sfx.GhostOn);
-        HUDMessage.Show("Ghost Mode!");
+        HUDMessage.Show("Your spirit slips free of your body!");
     }
 
     private void EndGhostMode()
@@ -188,16 +191,16 @@ public class GhostMode : MonoBehaviour
         {
             float left = Mathf.Max(0f, ghostEndTime - Time.time);
             statusText.text = waitingToLeaveWalls
-                ? "Ghost Mode: leave the wall!"
-                : $"Ghost Mode: {left:0.0}s";
+                ? "Spirit form: leave the wall!"
+                : $"Spirit form: {left:0.0}s";
         }
         else if (Time.time < nextAvailableTime)
         {
-            statusText.text = $"Ghost Mode ready in {nextAvailableTime - Time.time:0.0}s";
+            statusText.text = $"Spirit form ready in {nextAvailableTime - Time.time:0.0}s";
         }
         else
         {
-            statusText.text = "Ghost Mode ready (G)";
+            statusText.text = "Spirit form ready (G)";
         }
     }
 

@@ -1,6 +1,13 @@
 # Paired Prototype
 
-A 2D maze game where the player must collect colored keys, unlock doors, rescue the princess, and reach the checkpoint.
+A 2D maze game set in a haunted castle during a storm. The princess is trapped inside: collect colored keys, unlock the doors, rescue her, and escape through the checkpoint.
+
+## Theme
+
+* **The storm:** dark, moonlit castle with rain and lightning (thunder follows the flash).
+* **Powder kegs:** old explosive barrels. Shoot them and stay clear of the blast, or be dragged back to the gate.
+* **Cursed chests:** mystery boxes that may hold a blessing (a key, speed, spirit form) or a curse (slowed down, sent back to the gate).
+* **Spirit form:** press **G** to become a spirit for a few seconds. You pass through walls and are immune to powder kegs, but doors stay locked.
 
 ## How to Play
 
@@ -17,6 +24,7 @@ A 2D maze game where the player must collect colored keys, unlock doors, rescue 
 | Move                                   | **WASD**                                                  |
 | Shoot                                  | Hold the **Attack** control configured in `Player/Attack` |
 | Interact / Open door / Rescue princess | **F**                                                     |
+| Spirit form (walk through walls)       | **G**                                                     |
 
 The player automatically turns to face the current movement direction. Projectiles are fired in the direction the player is facing.
 
@@ -30,4 +38,4 @@ The player automatically turns to face the current movement direction. Projectil
 
 ## Win Condition
 
-Rescue the princess, then fully enter the checkpoint. The message **SUCCESS!** will appear when the objective is complete.
+Rescue the princess, then fully enter the checkpoint. The message **You escaped the castle with the princess!** will appear when the objective is complete.

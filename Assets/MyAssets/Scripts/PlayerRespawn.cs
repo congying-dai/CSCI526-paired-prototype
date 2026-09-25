@@ -24,6 +24,6 @@ public class PlayerRespawn : MonoBehaviour
         }
 
         transform.SetPositionAndRotation(startPosition, startRotation);
-        HUDMessage.Show("Back to the start!");
+        HUDMessage.Show("The castle drags you back to the gate!");
     }
 }

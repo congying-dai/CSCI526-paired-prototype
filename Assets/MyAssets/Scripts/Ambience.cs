@@ -1,49 +1,26 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Extra atmosphere on top of the storm: drifting mist, glowing fireflies, a dark vignette around
-// the screen edges and a glowing trail behind the player.
+// Haunted-castle mood: a dark vignette around the screen edges and a ghostly trail behind the
+// player while in spirit form (Ghost Mode).
 //
 // It creates itself when the scene starts, so no Unity setup is needed.
 // Add the component to an empty GameObject yourself if you want to change the settings.
 public class Ambience : MonoBehaviour
 {
-    [Header("Mist")]
-    public bool mist = true;
-    public int mistClouds = 9;
-    [Range(0f, 0.3f)] public float mistOpacity = 0.07f;
-    public Color mistColor = new Color(0.7f, 0.8f, 1f);
-
-    [Header("Fireflies")]
-    public bool fireflies = true;
-    public int fireflyCount = 35;
-    public Color fireflyColor = new Color(1f, 0.95f, 0.5f);
-
     [Header("Vignette (dark screen edges)")]
     public bool vignette = true;
     [Range(0f, 1f)] public float vignetteStrength = 0.65f;
 
-    [Header("Player trail")]
-    public bool playerTrail = true;
-    public Color trailColor = new Color(1f, 0.4f, 0.85f);
+    [Header("Spirit trail")]
+    public bool spiritTrail = true;
+    public Color trailColor = new Color(0.6f, 0.9f, 1f);
     public float trailInterval = 0.05f;
-
-    private class Mote
-    {
-        public Transform t;
-        public SpriteRenderer sr;
-        public Vector2 home;      // offset from the camera centre
-        public float seed;
-        public float speed;
-        public float radius;
-    }
 
     private static Sprite softSprite;
 
-    private Mote[] cloudMotes;
-    private Mote[] flyMotes;
+    private GhostMode ghost;
     private Transform player;
-    private Rigidbody2D playerBody;
     private float nextTrailTime;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
@@ -62,41 +39,7 @@ public class Ambience : MonoBehaviour
         if (pc != null)
         {
             player = pc.transform;
-            playerBody = pc.GetComponent<Rigidbody2D>();
-        }
-
-        Rect view = GetView();
-
-        if (mist)
-        {
-            cloudMotes = new Mote[mistClouds];
-
-            for (int i = 0; i < mistClouds; i++)
-            {
-                float size = Random.Range(7f, 12f);
-                Mote m = CreateMote("Mist", size, mistColor, 44);
-                m.home = new Vector2(Random.Range(-view.width / 2f, view.width / 2f),
-                                     Random.Range(-view.height / 2f, view.height / 2f));
-                m.radius = Random.Range(1.5f, 3f);
-                m.speed = Random.Range(0.05f, 0.12f);
-                m.sr.color = new Color(mistColor.r, mistColor.g, mistColor.b, mistOpacity * Random.Range(0.6f, 1.2f));
-                cloudMotes[i] = m;
-            }
-        }
-
-        if (fireflies)
-        {
-            flyMotes = new Mote[fireflyCount];
-
-            for (int i = 0; i < fireflyCount; i++)
-            {
-                Mote m = CreateMote("Firefly", Random.Range(0.18f, 0.35f), fireflyColor, 45);
-                m.home = new Vector2(Random.Range(-view.width / 2f, view.width / 2f),
-                                     Random.Range(-view.height / 2f, view.height / 2f));
-                m.radius = Random.Range(0.5f, 1.5f);
-                m.speed = Random.Range(0.3f, 0.7f);
-                flyMotes[i] = m;
-            }
+            ghost = pc.GetComponent<GhostMode>();
         }
 
         if (vignette)
@@ -107,84 +50,27 @@ public class Ambience : MonoBehaviour
 
     private void Update()
     {
-        Vector2 cam = Camera.main != null ? (Vector2)Camera.main.transform.position : Vector2.zero;
-
-        AnimateMotes(cloudMotes, cam, false);
-        AnimateMotes(flyMotes, cam, true);
-
-        if (playerTrail)
+        if (spiritTrail && ghost != null && ghost.IsGhost && Time.time >= nextTrailTime)
         {
-            UpdateTrail();
+            nextTrailTime = Time.time + trailInterval;
+            SpawnTrailPuff();
         }
     }
 
-    // ---------- Mist and fireflies ----------
+    // ---------- Spirit trail ----------
 
-    private void AnimateMotes(Mote[] motes, Vector2 cam, bool twinkle)
+    private void SpawnTrailPuff()
     {
-        if (motes == null)
-        {
-            return;
-        }
-
-        foreach (Mote m in motes)
-        {
-            float time = Time.time * m.speed;
-            // Perlin noise gives smooth, natural wandering
-            Vector2 wander = new Vector2(
-                Mathf.PerlinNoise(m.seed, time) - 0.5f,
-                Mathf.PerlinNoise(time, m.seed + 50f) - 0.5f) * 2f * m.radius;
-
-            m.t.position = new Vector3(cam.x + m.home.x + wander.x, cam.y + m.home.y + wander.y, 0f);
-
-            if (twinkle)
-            {
-                float glow = Mathf.Clamp01(0.25f + 0.85f * Mathf.PerlinNoise(m.seed + 20f, Time.time * 1.5f));
-                m.sr.color = new Color(fireflyColor.r, fireflyColor.g, fireflyColor.b, glow);
-            }
-        }
-    }
-
-    private Mote CreateMote(string name, float size, Color color, int order)
-    {
-        GameObject go = new GameObject(name);
-        go.transform.SetParent(transform, false);
-        go.transform.localScale = Vector3.one * size;
-
-        SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
-        sr.sprite = GetSoftSprite();
-        sr.color = color;
-        sr.sortingOrder = order;
-
-        return new Mote { t = go.transform, sr = sr, seed = Random.Range(0f, 100f) };
-    }
-
-    // ---------- Player trail ----------
-
-    private void UpdateTrail()
-    {
-        if (player == null || playerBody == null || Time.time < nextTrailTime)
-        {
-            return;
-        }
-
-        if (playerBody.linearVelocity.sqrMagnitude < 0.5f)
-        {
-            return;
-        }
-
-        nextTrailTime = Time.time + trailInterval;
-
-        GameObject go = new GameObject("Trail");
+        GameObject go = new GameObject("SpiritTrail");
         go.transform.position = player.position;
-        go.transform.localScale = Vector3.one * 0.5f;
+        go.transform.localScale = Vector3.one * 0.6f;
 
         SpriteRenderer sr = go.AddComponent<SpriteRenderer>();
         sr.sprite = GetSoftSprite();
         sr.color = new Color(trailColor.r, trailColor.g, trailColor.b, 0.6f);
         sr.sortingOrder = 9; // just below the player
 
-        go.AddComponent<FadeAndShrink>().duration = 0.6f;
+        go.AddComponent<FadeAndShrink>().duration = 0.8f;
     }
 
     // ---------- Vignette ----------
@@ -196,7 +82,7 @@ public class Ambience : MonoBehaviour
 
         Canvas canvas = canvasGo.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        canvas.sortingOrder = 90; // under the objective panel and other UI
+        canvas.sortingOrder = 90; // under other UI
 
         GameObject imageGo = new GameObject("Vignette");
         imageGo.transform.SetParent(canvasGo.transform, false);
@@ -236,8 +122,7 @@ public class Ambience : MonoBehaviour
         return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
     }
 
-    // ---------- Helpers ----------
-
+    // A circle with fuzzy edges, exactly 1 world unit wide
     private static Sprite GetSoftSprite()
     {
         if (softSprite != null)
@@ -245,7 +130,6 @@ public class Ambience : MonoBehaviour
             return softSprite;
         }
 
-        // A circle with fuzzy edges, exactly 1 world unit wide
         const int size = 64;
         Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
         tex.wrapMode = TextureWrapMode.Clamp;
@@ -265,20 +149,6 @@ public class Ambience : MonoBehaviour
         tex.Apply();
         softSprite = Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), size);
         return softSprite;
-    }
-
-    private static Rect GetView()
-    {
-        Camera cam = Camera.main;
-
-        if (cam == null || !cam.orthographic)
-        {
-            return new Rect(-10f, -6f, 20f, 12f);
-        }
-
-        float height = cam.orthographicSize * 2f;
-        float width = height * cam.aspect;
-        return new Rect(-width / 2f, -height / 2f, width, height);
     }
 }
 

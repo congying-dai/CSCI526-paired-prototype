@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Walk into the box to get a random effect - good or bad.
+// A cursed chest: walk into it to open it. It may hold a blessing or a curse.
 public class MysteryBox : MonoBehaviour
 {
     private enum Effect
@@ -50,12 +50,12 @@ public class MysteryBox : MonoBehaviour
             case Effect.FreeKey:
                 KeyColor color = (KeyColor)Random.Range(0, System.Enum.GetValues(typeof(KeyColor)).Length);
                 inventory.AddKey(color);
-                Report(true, boxPosition, $"You got a free {color} key!");
+                Report(true, boxPosition, $"The chest holds a {color} key!");
                 break;
 
             case Effect.SpeedBoost:
                 player.GetComponent<PlayerController>()?.ApplySpeedMultiplier(speedBoostMultiplier, speedEffectDuration);
-                Report(true, boxPosition, $"Speed boost for {speedEffectDuration:0} seconds!");
+                Report(true, boxPosition, $"A friendly spirit quickens your steps for {speedEffectDuration:0} seconds!");
                 break;
 
             case Effect.GhostMode:
@@ -64,21 +64,21 @@ public class MysteryBox : MonoBehaviour
                 if (ghost != null)
                 {
                     ghost.Activate(ghostDuration);
-                    Report(true, boxPosition, $"Ghost Mode for {ghostDuration:0} seconds!");
+                    Report(true, boxPosition, $"The chest frees your spirit form for {ghostDuration:0} seconds!");
                 }
                 else
                 {
-                    Report(true, boxPosition, "Ghost Mode (not set up on the player)");
+                    Report(true, boxPosition, "Spirit form (not set up on the player)");
                 }
                 break;
 
             case Effect.Slowdown:
                 player.GetComponent<PlayerController>()?.ApplySpeedMultiplier(slowdownMultiplier, speedEffectDuration);
-                Report(false, boxPosition, $"Slowed down for {speedEffectDuration:0} seconds!");
+                Report(false, boxPosition, $"Cursed! A chill of dread slows you for {speedEffectDuration:0} seconds!");
                 break;
 
             case Effect.BackToStart:
-                Report(false, boxPosition, "Disaster! Back to the start!");
+                Report(false, boxPosition, "Cursed! The chest drags you back to the gate!");
                 player.GetComponent<PlayerRespawn>()?.SendToStart();
                 break;
         }
@@ -87,7 +87,7 @@ public class MysteryBox : MonoBehaviour
     // Shows the result as text above the box (and on the HUD if there is one) and plays the good/bad effect.
     private void Report(bool good, Vector3 position, string message)
     {
-        HUDMessage.Show("Mystery Box: " + message);
+        HUDMessage.Show("Cursed Chest: " + message);
 
         if (good)
         {
