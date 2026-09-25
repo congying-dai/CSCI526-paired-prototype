@@ -107,7 +107,7 @@ public class ExplosionFlash : MonoBehaviour
         Destroy(gameObject);
     }
 
-    private static Sprite GetCircleSprite()
+    public static Sprite GetCircleSprite()
     {
         if (circleSprite != null)
         {
