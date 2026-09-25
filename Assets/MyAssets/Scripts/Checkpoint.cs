@@ -69,7 +69,7 @@ public class Checkpoint : MonoBehaviour
 
         if (successText != null)
         {
-            successText.text = "You escaped the castle with the princess!";
+            successText.text = "SUCCESS!";
             successText.gameObject.SetActive(true);
         }
 

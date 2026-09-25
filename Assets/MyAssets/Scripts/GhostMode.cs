@@ -10,10 +10,14 @@ public class GhostMode : MonoBehaviour
 {
     [Header("Timing")]
     [Tooltip("How long Ghost Mode lasts (seconds).")]
-    public float duration = 4f;
+    public float duration = 2.5f;
 
     [Tooltip("Cooldown after Ghost Mode ends (seconds).")]
-    public float cooldown = 8f;
+    public float cooldown = 15f;
+
+    [Header("Limits")]
+    [Tooltip("How many times the player can use spirit form per run (G key). Chests give a free use and don't count.")]
+    public int maxCharges = 3;
 
     [Header("Visuals")]
     [Range(0.1f, 1f)] public float ghostAlpha = 0.35f;
@@ -30,6 +34,9 @@ public class GhostMode : MonoBehaviour
 
     public bool IsGhost { get; private set; }
 
+    public int ChargesLeft { get; private set; }
+
+    private KeyInventory inventory;
     private Collider2D playerCollider;
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
@@ -45,6 +52,8 @@ public class GhostMode : MonoBehaviour
             TextBackdrop.Attach(statusText, 16f, 8f);
         }
 
+        inventory = GetComponent<KeyInventory>();
+        ChargesLeft = maxCharges;
         playerCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -86,17 +95,37 @@ public class GhostMode : MonoBehaviour
                 EndGhostMode();
             }
         }
-        else if (Keyboard.current != null &&
-                 Keyboard.current.gKey.wasPressedThisFrame &&
-                 Time.time >= nextAvailableTime)
+        else if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
         {
-            Activate(duration);
+            TryActivate();
         }
 
         UpdateStatusText();
     }
 
-    // Also called by mystery boxes.
+    // The G key: spirit form is limited, so it can fail for several reasons
+    private void TryActivate()
+    {
+        if (ChargesLeft <= 0)
+        {
+            HUDMessage.Show("Your spirit has no strength left...");
+        }
+        else if (Time.time < nextAvailableTime)
+        {
+            HUDMessage.Show("Your spirit is still recovering...");
+        }
+        else if (inventory != null && inventory.HasPrincess)
+        {
+            HUDMessage.Show("The princess is too heavy for spirit form!");
+        }
+        else
+        {
+            ChargesLeft--;
+            Activate(duration);
+        }
+    }
+
+    // Also called by mystery boxes (free, doesn't use a charge).
     public void Activate(float seconds)
     {
         if (IsGhost)
@@ -199,13 +228,17 @@ public class GhostMode : MonoBehaviour
                 ? "Spirit form: leave the wall!"
                 : $"Spirit form: {left:0.0}s";
         }
+        else if (ChargesLeft <= 0)
+        {
+            statusText.text = "Spirit form: no strength left";
+        }
         else if (Time.time < nextAvailableTime)
         {
-            statusText.text = $"Spirit form ready in {nextAvailableTime - Time.time:0.0}s";
+            statusText.text = $"Spirit form ready in {nextAvailableTime - Time.time:0.0}s ({ChargesLeft} left)";
         }
         else
         {
-            statusText.text = "Spirit form ready (G)";
+            statusText.text = $"Spirit form ready (G) - {ChargesLeft} left";
         }
     }
 

@@ -16,7 +16,7 @@ public class MysteryBox : MonoBehaviour
     public float speedBoostMultiplier = 1.6f;
     public float slowdownMultiplier = 0.5f;
     public float speedEffectDuration = 5f;
-    public float ghostDuration = 5f;
+    public float ghostDuration = 3f;
 
     private bool opened = false;
 

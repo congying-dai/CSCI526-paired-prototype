@@ -7,7 +7,7 @@ A 2D maze game set in a haunted castle during a storm. The princess is trapped i
 * **The storm:** dark, moonlit castle with rain and lightning (thunder follows the flash).
 * **Powder kegs:** old explosive barrels. Shoot them and stay clear of the blast, or be dragged back to the gate.
 * **Cursed chests:** mystery boxes that may hold a blessing (a key, speed, spirit form) or a curse (slowed down, sent back to the gate).
-* **Spirit form:** press **G** to become a spirit for a few seconds. You pass through walls and are immune to powder kegs, but doors stay locked.
+* **Spirit form:** press **G** to become a spirit for a few seconds. You pass through walls and are immune to powder kegs, but doors stay locked. It is a limited resource: only 3 uses per run, a long recharge between uses, and the princess is too heavy to carry in spirit form.
 
 ## How to Play
 
@@ -38,4 +38,4 @@ The player automatically turns to face the current movement direction. Projectil
 
 ## Win Condition
 
-Rescue the princess, then fully enter the checkpoint. The message **You escaped the castle with the princess!** will appear when the objective is complete.
+Rescue the princess, then fully enter the checkpoint. The message **SUCCESS!** will appear when the objective is complete.

@@ -355,8 +355,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ee67f10544a764d4d8a2e6131146fc4f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GhostMode
-  duration: 4
-  cooldown: 8
+  duration: 2.5
+  cooldown: 15
   ghostAlpha: 0.35
   statusText: {fileID: 0}
   wallRoots: []
@@ -6872,7 +6872,7 @@ MonoBehaviour:
   speedBoostMultiplier: 1.6
   slowdownMultiplier: 0.5
   speedEffectDuration: 5
-  ghostDuration: 5
+  ghostDuration: 3
 --- !u!212 &1658528336
 SpriteRenderer:
   serializedVersion: 2
