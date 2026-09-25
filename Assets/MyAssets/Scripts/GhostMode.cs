@@ -257,7 +257,7 @@ public class GhostMode : MonoBehaviour
             return;
         }
 
-        string uses = $"{ChargesLeft}/{maxCharges}";
+        string uses = $"{ChargesLeft}/{maxCharges} remaining";
 
         if (IsGhost)
         {
