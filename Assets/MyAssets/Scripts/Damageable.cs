@@ -15,9 +15,17 @@ public class Damageable : MonoBehaviour
 
     private int currentHits = 0;
     private bool hasBeenDestroyed = false;
+    private ShrinkOnHit shrink;
 
     private void Awake()
     {
+        shrink = GetComponent<ShrinkOnHit>();
+
+        if (shrink == null)
+        {
+            shrink = gameObject.AddComponent<ShrinkOnHit>();
+        }
+
         keyInventory = FindFirstObjectByType<KeyInventory>();
 
         if (keyInventory == null)
@@ -40,6 +48,7 @@ public class Damageable : MonoBehaviour
         }
 
         currentHits++;
+        shrink.SetProgress((float)currentHits / hitsRequired);
 
         Debug.Log(
             $"{gameObject.name}: {currentHits}/{hitsRequired}"

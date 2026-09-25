@@ -20,6 +20,17 @@ public class ExplosiveBarrel : MonoBehaviour
 
     private int currentHits = 0;
     private bool hasExploded = false;
+    private ShrinkOnHit shrink;
+
+    private void Awake()
+    {
+        shrink = GetComponent<ShrinkOnHit>();
+
+        if (shrink == null)
+        {
+            shrink = gameObject.AddComponent<ShrinkOnHit>();
+        }
+    }
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
@@ -29,6 +40,7 @@ public class ExplosiveBarrel : MonoBehaviour
         }
 
         currentHits++;
+        shrink.SetProgress((float)currentHits / hitsRequired);
 
         if (currentHits >= hitsRequired)
         {
