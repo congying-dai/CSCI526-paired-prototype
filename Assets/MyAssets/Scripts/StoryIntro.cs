@@ -59,6 +59,8 @@ public class StoryIntro : MonoBehaviour
         rt.anchoredPosition = Vector2.zero;
         rt.sizeDelta = new Vector2(1400f, 500f);
 
+        TextBackdrop.Attach(t, 50f, 35f, 0.85f);
+
         text = t;
         startTime = Time.time;
     }

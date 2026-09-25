@@ -21,6 +21,7 @@ public class HUDMessage : MonoBehaviour
         if (messageText != null)
         {
             messageText.text = "";
+            TextBackdrop.Attach(messageText);
         }
     }
 

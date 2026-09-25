@@ -57,10 +57,40 @@ public class MysteryBoxEffects : MonoBehaviour
         text.sortingOrder = 40;
         text.rectTransform.sizeDelta = new Vector2(8f, 2f);
 
-        StartCoroutine(AnimateText(text, color));
+        // Dark box behind the text so it is readable on any background
+        text.ForceMeshUpdate();
+        Bounds bounds = text.textBounds;
+
+        GameObject box = new GameObject("TextBackdrop");
+        box.transform.SetParent(go.transform, false);
+        box.transform.localPosition = bounds.center;
+        box.transform.localScale = new Vector3(bounds.size.x + 0.5f, bounds.size.y + 0.25f, 1f);
+
+        SpriteRenderer boxRenderer = box.AddComponent<SpriteRenderer>();
+        boxRenderer.sprite = GetBoxSprite();
+        boxRenderer.sortingOrder = 39; // just behind the text
+        boxRenderer.color = new Color(0.04f, 0.04f, 0.1f, 0.8f);
+
+        StartCoroutine(AnimateText(text, color, boxRenderer));
     }
 
-    private IEnumerator AnimateText(TextMeshPro text, Color color)
+    private static Sprite boxSprite;
+
+    // A 1x1 white square, centred, exactly 1 world unit wide
+    private static Sprite GetBoxSprite()
+    {
+        if (boxSprite == null)
+        {
+            Texture2D tex = new Texture2D(1, 1, TextureFormat.RGBA32, false);
+            tex.SetPixel(0, 0, Color.white);
+            tex.Apply();
+            boxSprite = Sprite.Create(tex, new Rect(0, 0, 1, 1), new Vector2(0.5f, 0.5f), 1f);
+        }
+
+        return boxSprite;
+    }
+
+    private IEnumerator AnimateText(TextMeshPro text, Color color, SpriteRenderer box)
     {
         const float life = 2f;
         float time = 0f;
@@ -71,7 +101,9 @@ public class MysteryBoxEffects : MonoBehaviour
             float p = time / life;
             text.transform.position = start + Vector3.up * p * 0.8f;
             // Stay fully visible for the first half, then fade
-            text.color = new Color(color.r, color.g, color.b, Mathf.Clamp01(2f * (1f - p)));
+            float fade = Mathf.Clamp01(2f * (1f - p));
+            text.color = new Color(color.r, color.g, color.b, fade);
+            box.color = new Color(0.04f, 0.04f, 0.1f, 0.8f * fade);
             time += Time.deltaTime;
             yield return null;
         }

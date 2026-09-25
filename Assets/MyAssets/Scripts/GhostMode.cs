@@ -40,6 +40,11 @@ public class GhostMode : MonoBehaviour
 
     private void Awake()
     {
+        if (statusText != null)
+        {
+            TextBackdrop.Attach(statusText, 16f, 8f);
+        }
+
         playerCollider = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
 

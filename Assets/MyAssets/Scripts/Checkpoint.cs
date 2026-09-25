@@ -15,6 +15,7 @@ public class Checkpoint : MonoBehaviour
 
         if (successText != null)
         {
+            TextBackdrop.Attach(successText, 40f, 24f, 0.9f);
             successText.gameObject.SetActive(false);
         }
     }
