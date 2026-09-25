@@ -14,6 +14,11 @@ public class Damageable : MonoBehaviour
     private KeyInventory keyInventory;
 
     private int currentHits = 0;
+
+    public int HitsTaken
+    {
+        get { return currentHits; }
+    }
     private bool hasBeenDestroyed = false;
     private ShrinkOnHit shrink;
 

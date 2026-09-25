@@ -11,6 +11,16 @@ public class Door : MonoBehaviour
 
     private KeyInventory nearbyPlayerInventory;
 
+    public bool PlayerNearby
+    {
+        get { return nearbyPlayerInventory != null; }
+    }
+
+    public GameObject DoorObject
+    {
+        get { return doorObject != null ? doorObject : gameObject; }
+    }
+
     private void Awake()
     {
         // Automatically use the parent as the door object

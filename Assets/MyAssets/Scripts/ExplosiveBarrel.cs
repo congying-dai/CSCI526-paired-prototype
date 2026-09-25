@@ -19,6 +19,11 @@ public class ExplosiveBarrel : MonoBehaviour
     public float explosionDuration = 0.4f;
 
     private int currentHits = 0;
+
+    public int HitsTaken
+    {
+        get { return currentHits; }
+    }
     private bool hasExploded = false;
     private ShrinkOnHit shrink;
 
