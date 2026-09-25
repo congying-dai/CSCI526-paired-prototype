@@ -22,6 +22,7 @@ public class PrincessInteraction : MonoBehaviour
     private void Interact()
     {
         nearbyPlayerInventory.CollectPrincess();
+        SoundEffects.Play(SoundEffects.Sfx.Princess);
 
         Debug.Log("Princess collected.");
 

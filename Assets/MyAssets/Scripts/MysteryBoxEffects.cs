@@ -10,6 +10,7 @@ public class MysteryBoxEffects : MonoBehaviour
     {
         MysteryBoxEffects fx = Spawn(position);
         fx.StartGood();
+        SoundEffects.Play(SoundEffects.Sfx.MysteryGood);
         fx.ShowText(message, new Color(1f, 0.9f, 0.3f));
     }
 
@@ -17,6 +18,7 @@ public class MysteryBoxEffects : MonoBehaviour
     {
         MysteryBoxEffects fx = Spawn(position);
         fx.StartBad();
+        SoundEffects.Play(SoundEffects.Sfx.MysteryBad);
         fx.ShowText(message, new Color(1f, 0.25f, 0.25f));
     }
 

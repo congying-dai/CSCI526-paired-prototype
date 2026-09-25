@@ -40,6 +40,7 @@ public class ExplosiveBarrel : MonoBehaviour
         }
 
         currentHits++;
+        SoundEffects.Play(SoundEffects.Sfx.Hit);
         shrink.SetProgress((float)currentHits / hitsRequired);
 
         if (currentHits >= hitsRequired)
@@ -51,6 +52,7 @@ public class ExplosiveBarrel : MonoBehaviour
     private void Explode()
     {
         hasExploded = true;
+        SoundEffects.Play(SoundEffects.Sfx.Explosion);
 
         Collider2D[] hits = Physics2D.OverlapCircleAll(transform.position, blastRadius);
 

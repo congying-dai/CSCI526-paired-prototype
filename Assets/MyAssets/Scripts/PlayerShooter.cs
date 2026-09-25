@@ -38,6 +38,8 @@ public class PlayerShooter : MonoBehaviour
 
     private void Shoot()
     {
+        SoundEffects.Play(SoundEffects.Sfx.Shoot);
+
         // The triangle's local up direction is treated as its forward direction
         Vector2 shootDirection = transform.up;
 

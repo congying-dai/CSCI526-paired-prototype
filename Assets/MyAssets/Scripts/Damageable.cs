@@ -48,6 +48,7 @@ public class Damageable : MonoBehaviour
         }
 
         currentHits++;
+        SoundEffects.Play(SoundEffects.Sfx.Hit);
         shrink.SetProgress((float)currentHits / hitsRequired);
 
         Debug.Log(
@@ -63,6 +64,7 @@ public class Damageable : MonoBehaviour
     private void DestroyAndGiveKey()
     {
         hasBeenDestroyed = true;
+        SoundEffects.Play(SoundEffects.Sfx.KeyPickup);
         Debug.Log("DestroyAndGiveKey()");
 
         if (keyInventory != null)

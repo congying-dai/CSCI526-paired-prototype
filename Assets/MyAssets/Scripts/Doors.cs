@@ -47,10 +47,12 @@ public class Door : MonoBehaviour
 
         if (successfullyUsedKey)
         {
+            SoundEffects.Play(SoundEffects.Sfx.DoorOpen);
             Destroy(doorObject);
         }
         else
         {
+            SoundEffects.Play(SoundEffects.Sfx.Denied);
             Debug.Log(
                 $"You do not have a {requiredKeyColor} key."
             );

@@ -111,11 +111,13 @@ public class GhostMode : MonoBehaviour
             spriteRenderer.color = c;
         }
 
+        SoundEffects.Play(SoundEffects.Sfx.GhostOn);
         HUDMessage.Show("Ghost Mode!");
     }
 
     private void EndGhostMode()
     {
+        SoundEffects.Play(SoundEffects.Sfx.GhostOff);
         IsGhost = false;
         waitingToLeaveWalls = false;
         nextAvailableTime = Time.time + cooldown;

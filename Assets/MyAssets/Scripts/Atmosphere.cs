@@ -86,6 +86,7 @@ public class Atmosphere : MonoBehaviour
         if (rain)
         {
             CreateRain();
+            SoundEffects.StartRain();
         }
     }
 
@@ -113,6 +114,7 @@ public class Atmosphere : MonoBehaviour
             yield return new WaitForSeconds(Random.Range(minTimeBetweenStrikes, maxTimeBetweenStrikes));
 
             // Two quick flashes, then a slow fade back to the dark level
+            StartCoroutine(ThunderAfterDelay(Random.Range(0.3f, 1.5f)));
             yield return Flash(flashBrightness, 0.06f);
             SetLight(darkness * 0.8f);
             yield return new WaitForSeconds(0.08f);
@@ -130,6 +132,13 @@ public class Atmosphere : MonoBehaviour
 
             SetLight(darkness);
         }
+    }
+
+    // Sound travels slower than light, so the thunder arrives a moment after the flash
+    private IEnumerator ThunderAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        SoundEffects.Play(SoundEffects.Sfx.Thunder);
     }
 
     private IEnumerator Flash(float brightness, float duration)

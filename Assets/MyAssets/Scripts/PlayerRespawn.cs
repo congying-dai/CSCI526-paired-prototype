@@ -16,6 +16,7 @@ public class PlayerRespawn : MonoBehaviour
 
     public void SendToStart()
     {
+        SoundEffects.Play(SoundEffects.Sfx.Reset);
         if (rb != null)
         {
             rb.linearVelocity = Vector2.zero;

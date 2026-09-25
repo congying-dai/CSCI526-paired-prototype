@@ -64,6 +64,7 @@ public class Checkpoint : MonoBehaviour
     private void CompleteGame()
     {
         hasCompleted = true;
+        SoundEffects.Play(SoundEffects.Sfx.Success);
 
         if (successText != null)
         {
