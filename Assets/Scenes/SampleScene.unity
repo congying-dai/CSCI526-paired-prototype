@@ -590,7 +590,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0057536364, y: 0.49122423}
+  m_Offset: {x: 0.0057536364, y: -0.071875334}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -600,7 +600,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.98849213, y: 1.9824485}
+  m_Size: {x: 0.98849213, y: 3.1086473}
   m_EdgeRadius: 0
 --- !u!1 &157103338
 GameObject:
@@ -1098,7 +1098,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.009479821, y: 0.51258177}
+  m_Offset: {x: 0.009479821, y: -0.08571172}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -1108,7 +1108,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.9810401, y: 2.0251637}
+  m_Size: {x: 0.9810401, y: 3.2217507}
   m_EdgeRadius: 0
 --- !u!1 &276898202
 GameObject:
@@ -2292,7 +2292,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.5046798, y: 0}
+  m_Offset: {x: -0.013264358, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -2302,7 +2302,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.0093598, y: 1}
+  m_Size: {x: 2.9921908, y: 1}
   m_EdgeRadius: 0
 --- !u!114 &479987014
 MonoBehaviour:
@@ -4399,7 +4399,6 @@ GameObject:
   - component: {fileID: 931260328}
   - component: {fileID: 931260329}
   - component: {fileID: 931260330}
-  - component: {fileID: 931260331}
   m_Layer: 0
   m_Name: Square (3)
   m_TagString: Untagged
@@ -4541,22 +4540,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Damageable
   hitsRequired: 5
   keyColor: 2
---- !u!114 &931260331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 931260326}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f62d8dd7b8806e4429b07331a7b6949c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ExplosiveBarrel
-  hitsRequired: 3
-  blastRadius: 2
-  explosionColor: {r: 1, g: 0.55, b: 0.1, a: 0.8}
-  explosionDuration: 0.4
 --- !u!1 &1009611437
 GameObject:
   m_ObjectHideFlags: 0
@@ -4927,7 +4910,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.5046798, y: 0}
+  m_Offset: {x: 0.062337637, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -4937,7 +4920,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.0093598, y: 1}
+  m_Size: {x: 3.143395, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &1104263159
 GameObject:
@@ -7864,7 +7847,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   m_Color: {r: 1, g: 0.95858216, b: 0, a: 1}
@@ -8417,7 +8400,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.5046798, y: 0}
+  m_Offset: {x: 0.1001389, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -8427,7 +8410,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.0093598, y: 1}
+  m_Size: {x: 3.2189975, y: 1}
   m_EdgeRadius: 0
 --- !u!1 &2028350616
 GameObject:

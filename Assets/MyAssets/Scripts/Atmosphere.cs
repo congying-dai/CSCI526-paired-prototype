@@ -43,7 +43,7 @@ public class Atmosphere : MonoBehaviour
     private const float DropSlant = 0.25f;
 
     // Creates the atmosphere automatically unless one was already placed in the scene.
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreate()
     {
         if (FindFirstObjectByType<Atmosphere>() == null)
