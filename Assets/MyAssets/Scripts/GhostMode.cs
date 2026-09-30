@@ -45,6 +45,8 @@ public class GhostMode : MonoBehaviour
     private float ghostEndTime;
     private float nextAvailableTime;
     private bool waitingToLeaveWalls;
+    // Only spirit form started with the G key triggers the cooldown (mystery box ones are free)
+    private bool activatedByKey;
 
     private void Awake()
     {
@@ -87,6 +89,11 @@ public class GhostMode : MonoBehaviour
     {
         if (IsGhost)
         {
+            if (Keyboard.current != null && Keyboard.current.gKey.wasPressedThisFrame)
+            {
+                HUDMessage.Show("You are already in spirit form!");
+            }
+
             if (!waitingToLeaveWalls && Time.time >= ghostEndTime)
             {
                 waitingToLeaveWalls = true;
@@ -125,6 +132,7 @@ public class GhostMode : MonoBehaviour
         {
             ChargesLeft--;
             Activate(duration);
+            activatedByKey = true;
         }
     }
 
@@ -139,6 +147,7 @@ public class GhostMode : MonoBehaviour
         }
 
         IsGhost = true;
+        activatedByKey = false;
         waitingToLeaveWalls = false;
         ghostEndTime = Time.time + seconds;
 
@@ -160,7 +169,13 @@ public class GhostMode : MonoBehaviour
         SoundEffects.Play(SoundEffects.Sfx.GhostOff);
         IsGhost = false;
         waitingToLeaveWalls = false;
-        nextAvailableTime = Time.time + cooldown;
+
+        if (activatedByKey)
+        {
+            nextAvailableTime = Time.time + cooldown;
+        }
+
+        activatedByKey = false;
 
         SetIgnoredColliders(false);
 
@@ -269,6 +284,10 @@ public class GhostMode : MonoBehaviour
         else if (ChargesLeft <= 0)
         {
             statusText.text = $"Spirit form {uses} - no strength left";
+        }
+        else if (inventory != null && inventory.HasPrincess)
+        {
+            statusText.text = $"Spirit form {uses} - the princess is too heavy";
         }
         else if (Time.time < nextAvailableTime)
         {
