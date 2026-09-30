@@ -5,7 +5,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 // Spirit power. Press G to slip into spirit form for a few seconds: the player turns pale and
-// see-through, can walk through walls and moving railings, and is immune to powder keg blasts. Doors, the princess and barrels stay solid.
+// see-through, can walk through walls, locked doors (optional) and moving railings, and is immune to powder keg blasts.
+// Walls listed in solidWalls (e.g. the outer boundary) and the princess and barrels stay solid.
 [RequireComponent(typeof(PlayerRespawn))]
 public class GhostMode : MonoBehaviour
 {
@@ -32,6 +33,15 @@ public class GhostMode : MonoBehaviour
     [Header("What the ghost can pass through")]
     [Tooltip("Parents of all wall colliders (e.g. the 'Walls' and 'Obstacles' objects). If empty, objects named Walls and Obstacles are searched for automatically.")]
     public Transform[] wallRoots;
+
+    [Tooltip("Walls the ghost can NEVER pass, even if they are under a wall root (e.g. the 4 outer boundary walls). Drag their colliders here.")]
+    public Collider2D[] solidWalls;
+
+    [Tooltip("If on, the ghost can also pass through locked doors (the 'Doors' object).")]
+    public bool passThroughDoors = true;
+
+    [Tooltip("Parent of all door objects. If empty, an object named Doors is searched for automatically.")]
+    public Transform doorsRoot;
 
     public bool IsGhost { get; private set; }
 
@@ -82,6 +92,16 @@ public class GhostMode : MonoBehaviour
             }
 
             wallRoots = found.ToArray();
+        }
+
+        if (doorsRoot == null)
+        {
+            GameObject doors = GameObject.Find("Doors");
+
+            if (doors != null)
+            {
+                doorsRoot = doors.transform;
+            }
         }
     }
 
@@ -193,15 +213,17 @@ public class GhostMode : MonoBehaviour
 
             foreach (Transform root in wallRoots)
             {
-                if (root != null)
-                {
-                    ignoredColliders.AddRange(root.GetComponentsInChildren<Collider2D>());
-                }
+                AddPassableColliders(root);
+            }
+
+            if (passThroughDoors)
+            {
+                AddPassableColliders(doorsRoot);
             }
 
             foreach (MovingRailing railing in FindObjectsByType<MovingRailing>(FindObjectsSortMode.None))
             {
-                ignoredColliders.AddRange(railing.GetComponentsInChildren<Collider2D>());
+                AddPassableColliders(railing.transform);
             }
         }
 
@@ -216,6 +238,25 @@ public class GhostMode : MonoBehaviour
         if (!ignore)
         {
             ignoredColliders.Clear();
+        }
+    }
+
+    private void AddPassableColliders(Transform root)
+    {
+        if (root == null)
+        {
+            return;
+        }
+
+        foreach (Collider2D col in root.GetComponentsInChildren<Collider2D>())
+        {
+            // Triggers (e.g. a door's InteractionZone) must keep working, and solid walls stay solid
+            if (col.isTrigger || (solidWalls != null && System.Array.IndexOf(solidWalls, col) >= 0))
+            {
+                continue;
+            }
+
+            ignoredColliders.Add(col);
         }
     }
 
