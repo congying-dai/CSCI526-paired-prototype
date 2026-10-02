@@ -4,9 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-// Spirit power. Press G to slip into spirit form for a few seconds: the player turns pale and
-// see-through, can walk through walls, locked doors (optional) and moving railings, and is immune to powder keg blasts.
-// Walls listed in solidWalls (e.g. the outer boundary) and the princess and barrels stay solid.
 [RequireComponent(typeof(PlayerRespawn))]
 public class GhostMode : MonoBehaviour
 {
@@ -119,7 +116,6 @@ public class GhostMode : MonoBehaviour
                 waitingToLeaveWalls = true;
             }
 
-            // Don't turn solid while standing inside a wall, otherwise the player would get stuck
             if (waitingToLeaveWalls && !IsInsideAWall())
             {
                 EndGhostMode();
@@ -133,7 +129,6 @@ public class GhostMode : MonoBehaviour
         UpdateStatusText();
     }
 
-    // The G key: spirit form is limited, so it can fail for several reasons
     private void TryActivate()
     {
         if (ChargesLeft <= 0)
@@ -156,7 +151,6 @@ public class GhostMode : MonoBehaviour
         }
     }
 
-    // Also called by mystery boxes (free, doesn't use a charge).
     public void Activate(float seconds)
     {
         if (IsGhost)
@@ -250,7 +244,6 @@ public class GhostMode : MonoBehaviour
 
         foreach (Collider2D col in root.GetComponentsInChildren<Collider2D>())
         {
-            // Triggers (e.g. a door's InteractionZone) must keep working, and solid walls stay solid
             if (col.isTrigger || (solidWalls != null && System.Array.IndexOf(solidWalls, col) >= 0))
             {
                 continue;
@@ -273,7 +266,6 @@ public class GhostMode : MonoBehaviour
         return false;
     }
 
-    // Bottom-left corner text, so the counter shows even if nothing was set up in the scene
     private TMP_Text CreateStatusText()
     {
         GameObject canvasGo = new GameObject("SpiritStatusCanvas");

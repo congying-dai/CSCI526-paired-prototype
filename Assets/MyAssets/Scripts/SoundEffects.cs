@@ -2,10 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-// All game sounds. There are no audio files: every sound is synthesised in code when the game starts.
-//
-// Play a sound from anywhere with:  SoundEffects.Play(SoundEffects.Sfx.Explosion);
-// The manager creates itself the first time a sound is played (or when the scene starts).
 public class SoundEffects : MonoBehaviour
 {
     public enum Sfx
@@ -107,7 +103,6 @@ public class SoundEffects : MonoBehaviour
             return;
         }
 
-        // Stops the same sound from stacking up dozens of times in one frame
         float allowed;
 
         if (nextAllowedTime.TryGetValue(sfx, out allowed) && Time.unscaledTime < allowed)
@@ -119,48 +114,41 @@ public class SoundEffects : MonoBehaviour
         sfxSource.PlayOneShot(clip, masterVolume);
     }
 
-    // ---------- The sounds ----------
-
     private void BuildClips()
     {
-        // Player shooting: short falling "pew"
+        
         Add(Sfx.Shoot, Finish(Tone(0.09f, p => Mathf.Lerp(950f, 350f, p), Wave.Square, p => Mathf.Exp(-4f * p), 1f), 0.25f));
 
-        // Projectile hitting something: dull thud with a bit of noise
+
         Add(Sfx.Hit, Finish(Mix(
             Tone(0.09f, p => Mathf.Lerp(200f, 90f, p), Wave.Sine, p => Mathf.Exp(-6f * p), 1f),
             Noise(0.09f, 3000f, 800f, p => Mathf.Exp(-9f * p), 0.5f)), 0.5f));
 
-        // Explosion: low boom plus a long fading rumble of noise
         Add(Sfx.Explosion, Finish(Mix(
             Tone(0.9f, p => Mathf.Lerp(90f, 35f, p), Wave.Sine, p => Mathf.Exp(-3.5f * p), 1f),
             Noise(0.9f, 2500f, 150f, p => Mathf.Min(1f, p * 60f) * Mathf.Exp(-4f * p), 1f)), 1f));
 
-        // Thunder: rough crack, then a long low rumble
         Add(Sfx.Thunder, Finish(Mix(
             Noise(2.4f, 1200f, 90f, p => Mathf.Min(1f, p * 25f) * Mathf.Exp(-1.8f * p), 1f),
             Noise(2.4f, 400f, 60f, p => Mathf.Min(1f, p * 6f) * Mathf.Exp(-1.2f * p), 1f)), 0.9f));
 
-        // Key pickup: two bright rising notes
         Add(Sfx.KeyPickup, Finish(Notes(new[] { 880f, 1320f }, 0.12f, Wave.Sine, 3f), 0.5f));
 
-        // Door opening: creaking low sweep ending in a thunk
+ 
         Add(Sfx.DoorOpen, Finish(Concat(
             Tone(0.45f, p => Mathf.Lerp(70f, 130f, p) + 6f * Mathf.Sin(p * 60f), Wave.Saw, p => Mathf.Sin(p * Mathf.PI) * 0.8f, 1f),
             Tone(0.15f, p => Mathf.Lerp(120f, 50f, p), Wave.Sine, p => Mathf.Exp(-7f * p), 1f)), 0.6f));
 
-        // Wrong key: short low double buzz
+
         Add(Sfx.Denied, Finish(Concat(
             Tone(0.09f, p => 150f, Wave.Square, p => 1f - p, 1f),
             Tone(0.12f, p => 120f, Wave.Square, p => 1f - p, 1f)), 0.35f));
 
-        // Mystery box, good: happy rising arpeggio
+     
         Add(Sfx.MysteryGood, Finish(Notes(new[] { 523f, 659f, 784f, 1047f }, 0.09f, Wave.Sine, 3.5f), 0.5f));
 
-        // Mystery box, bad: falling wobbling buzz
         Add(Sfx.MysteryBad, Finish(Tone(0.6f, p => Mathf.Lerp(420f, 80f, p) + 12f * Mathf.Sin(p * 90f), Wave.Saw, p => 1f - p, 1f), 0.45f));
 
-        // Ghost Mode on: airy whoosh that rises. Off: falls.
         Add(Sfx.GhostOn, Finish(Mix(
             Tone(0.6f, p => Mathf.Lerp(250f, 900f, p), Wave.Sine, p => Mathf.Sin(p * Mathf.PI), 0.6f),
             Noise(0.6f, 500f, 4000f, p => Mathf.Sin(p * Mathf.PI), 0.7f)), 0.4f));
@@ -169,18 +157,14 @@ public class SoundEffects : MonoBehaviour
             Tone(0.5f, p => Mathf.Lerp(700f, 200f, p), Wave.Sine, p => Mathf.Sin(p * Mathf.PI), 0.6f),
             Noise(0.5f, 3500f, 400f, p => Mathf.Sin(p * Mathf.PI), 0.7f)), 0.35f));
 
-        // Princess rescued: soft, warm three-note chime
         Add(Sfx.Princess, Finish(Notes(new[] { 659f, 784f, 988f }, 0.16f, Wave.Sine, 2.5f), 0.5f));
 
-        // Level complete: short fanfare
         Add(Sfx.Success, Finish(Concat(
             Notes(new[] { 523f, 659f, 784f }, 0.14f, Wave.Square, 3f),
             Tone(0.7f, p => 1047f, Wave.Square, p => Mathf.Exp(-2.5f * p), 1f)), 0.4f));
 
-        // Sent back to the start: quick falling zap
         Add(Sfx.Reset, Finish(Tone(0.35f, p => Mathf.Lerp(900f, 120f, p), Wave.Saw, p => 1f - p, 1f), 0.45f));
 
-        // Rain: steady hiss
         rainSource.clip = MakeClip("Rain", Finish(Noise(4f, 6000f, 6000f, p => 1f, 1f), 1f));
     }
 
@@ -196,11 +180,9 @@ public class SoundEffects : MonoBehaviour
         return clip;
     }
 
-    // ---------- Synthesis helpers ----------
-
     private enum Wave { Sine, Square, Saw }
 
-    // A tone whose pitch (freq) and loudness (env) are functions of progress p, from 0 to 1.
+
     private static float[] Tone(float duration, Func<float, float> freq, Wave wave, Func<float, float> env, float volume)
     {
         int n = (int)(duration * Rate);
@@ -227,7 +209,6 @@ public class SoundEffects : MonoBehaviour
         return data;
     }
 
-    // Noise run through a low-pass filter whose cut-off moves from cutStart to cutEnd.
     private static float[] Noise(float duration, float cutStart, float cutEnd, Func<float, float> env, float volume)
     {
         int n = (int)(duration * Rate);
@@ -246,7 +227,6 @@ public class SoundEffects : MonoBehaviour
         return data;
     }
 
-    // A row of notes, one after another, each fading out
     private static float[] Notes(float[] freqs, float noteDuration, Wave wave, float decay)
     {
         float[][] parts = new float[freqs.Length][];
@@ -281,7 +261,6 @@ public class SoundEffects : MonoBehaviour
         return result;
     }
 
-    // Plays sounds on top of each other
     private static float[] Mix(params float[][] layers)
     {
         int length = 0;
@@ -304,7 +283,6 @@ public class SoundEffects : MonoBehaviour
         return result;
     }
 
-    // Scales the loudest point of the sound to 'peak' and softly fades the very start and end to avoid clicks.
     private static float[] Finish(float[] data, float peak)
     {
         float max = 0.0001f;

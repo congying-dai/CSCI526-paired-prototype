@@ -1,11 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-// Haunted-castle mood: a dark vignette around the screen edges and a ghostly trail behind the
-// player while in spirit form (Ghost Mode).
-//
-// It creates itself when the scene starts, so no Unity setup is needed.
-// Add the component to an empty GameObject yourself if you want to change the settings.
+
 public class Ambience : MonoBehaviour
 {
     [Header("Vignette (dark screen edges)")]
@@ -57,7 +53,6 @@ public class Ambience : MonoBehaviour
         }
     }
 
-    // ---------- Spirit trail ----------
 
     private void SpawnTrailPuff()
     {
@@ -72,8 +67,6 @@ public class Ambience : MonoBehaviour
 
         go.AddComponent<FadeAndShrink>().duration = 0.8f;
     }
-
-    // ---------- Vignette ----------
 
     private void CreateVignette()
     {
@@ -122,7 +115,6 @@ public class Ambience : MonoBehaviour
         return Sprite.Create(tex, new Rect(0, 0, size, size), new Vector2(0.5f, 0.5f), 100f);
     }
 
-    // A circle with fuzzy edges, exactly 1 world unit wide
     private static Sprite GetSoftSprite()
     {
         if (softSprite != null)
@@ -152,7 +144,6 @@ public class Ambience : MonoBehaviour
     }
 }
 
-// Fades a sprite out while shrinking it, then destroys it.
 public class FadeAndShrink : MonoBehaviour
 {
     public float duration = 0.6f;

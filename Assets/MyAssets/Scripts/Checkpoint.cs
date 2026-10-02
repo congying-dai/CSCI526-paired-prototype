@@ -34,14 +34,12 @@ public class Checkpoint : MonoBehaviour
         {
             return;
         }
-
-        // Wait until the player's collider is completely inside
+    
         if (!IsFullyInside(other))
         {
             return;
         }
 
-        // The player must have collected the princess
         if (!inventory.HasPrincess)
         {
             return;

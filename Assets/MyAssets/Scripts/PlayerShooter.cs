@@ -39,8 +39,6 @@ public class PlayerShooter : MonoBehaviour
     private void Shoot()
     {
         SoundEffects.Play(SoundEffects.Sfx.Shoot);
-
-        // The triangle's local up direction is treated as its forward direction
         Vector2 shootDirection = transform.up;
 
         GameObject projectile = Instantiate(
@@ -56,7 +54,6 @@ public class PlayerShooter : MonoBehaviour
             projectileRb.linearVelocity = shootDirection * projectileSpeed;
         }
 
-        // Prevent the projectile from immediately colliding with the player
         Collider2D playerCollider = GetComponent<Collider2D>();
         Collider2D projectileCollider = projectile.GetComponent<Collider2D>();
 

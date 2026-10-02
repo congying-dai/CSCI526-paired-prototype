@@ -2,8 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// Tells the story at the start of the game so the player knows the goal straight away.
-// It creates itself when the scene starts, shows the text for a few seconds and fades it out.
 public class StoryIntro : MonoBehaviour
 {
     [TextArea(2, 5)]
@@ -75,7 +73,6 @@ public class StoryIntro : MonoBehaviour
         float elapsed = Time.time - startTime;
         float alpha = 1f;
 
-        // Fade in quickly, hold, then fade out
         if (elapsed < 0.6f)
         {
             alpha = elapsed / 0.6f;

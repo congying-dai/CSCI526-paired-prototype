@@ -1,8 +1,6 @@
 using System.Collections;
 using UnityEngine;
 
-// An old powder keg that explodes after being shot. If the player is inside the blast
-// radius (and not in spirit form) they are sent back to the start.
 public class ExplosiveBarrel : MonoBehaviour
 {
     [Header("Explosion")]
@@ -91,7 +89,6 @@ public class ExplosiveBarrel : MonoBehaviour
     }
 }
 
-// Expanding, fading circle drawn at runtime, so no art assets are needed.
 public class ExplosionFlash : MonoBehaviour
 {
     private static Sprite circleSprite;
@@ -111,7 +108,6 @@ public class ExplosionFlash : MonoBehaviour
         while (t < duration)
         {
             float p = t / duration;
-            // The sprite is 1 unit wide, so scale = diameter
             transform.localScale = Vector3.one * radius * 2f * Mathf.Lerp(0.2f, 1f, p);
             sr.color = new Color(color.r, color.g, color.b, color.a * (1f - p));
             t += Time.deltaTime;

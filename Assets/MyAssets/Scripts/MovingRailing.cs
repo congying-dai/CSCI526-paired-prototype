@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// A solid barrier that slides up and down forever. The player has to time their crossing.
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingRailing : MonoBehaviour
 {
@@ -25,7 +24,6 @@ public class MovingRailing : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // PingPong goes 0 -> travelDistance*2 -> 0; subtracting travelDistance centres it on the start position
         float cycle = Mathf.Max(travelDistance * 2f, 0.0001f);
         float offset = Mathf.PingPong(Time.time * speed + phase * cycle, cycle) - travelDistance;
         rb.MovePosition(startPosition + Vector2.up * offset);

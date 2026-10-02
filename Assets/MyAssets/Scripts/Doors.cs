@@ -13,7 +13,6 @@ public class Door : MonoBehaviour
 
     private void Awake()
     {
-        // Automatically use the parent as the door object
         if (transform.parent != null)
         {
             doorObject = transform.parent.gameObject;

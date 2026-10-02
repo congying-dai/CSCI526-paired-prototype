@@ -54,7 +54,6 @@ public class StretchingWall : MonoBehaviour
 
         CalculateFixedPoint();
 
-        // Remember where the fixed end starts in world space
         fixedPointWorld = transform.TransformPoint(fixedPointLocal);
     }
 
@@ -81,7 +80,6 @@ public class StretchingWall : MonoBehaviour
 
         transform.localScale = newScale;
 
-        // Move the wall so the selected end remains fixed
         Vector3 currentFixedPoint =
             transform.TransformPoint(fixedPointLocal);
 

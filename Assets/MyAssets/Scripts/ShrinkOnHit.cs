@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// Makes an object smaller every time it is shot. Added automatically by Damageable and ExplosiveBarrel.
 public class ShrinkOnHit : MonoBehaviour
 {
     [Tooltip("Size (as a fraction of the original) right before the object is destroyed.")]
@@ -18,7 +17,6 @@ public class ShrinkOnHit : MonoBehaviour
         targetScale = originalScale;
     }
 
-    // hits / hitsRequired, from 0 (untouched) to 1 (about to be destroyed)
     public void SetProgress(float progress)
     {
         targetScale = originalScale * Mathf.Lerp(1f, minScale, Mathf.Clamp01(progress));

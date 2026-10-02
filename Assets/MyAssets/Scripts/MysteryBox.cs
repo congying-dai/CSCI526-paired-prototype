@@ -1,6 +1,5 @@
 using UnityEngine;
 
-// A cursed chest: walk into it to open it. It may hold a blessing or a curse.
 public class MysteryBox : MonoBehaviour
 {
     private enum Effect

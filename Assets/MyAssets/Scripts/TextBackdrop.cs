@@ -2,10 +2,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// A dark, semi-transparent box behind a UI text so it stays readable on any background.
-// The box sizes itself to the text, follows it, and is hidden whenever the text is empty or inactive.
-//
-//   TextBackdrop.Attach(myTmpText);
 public class TextBackdrop : MonoBehaviour
 {
     public static readonly Color BoxColor = new Color(0.04f, 0.04f, 0.10f, 1f);
@@ -26,7 +22,6 @@ public class TextBackdrop : MonoBehaviour
         GameObject go = new GameObject(text.name + "_Backdrop", typeof(RectTransform));
         go.transform.SetParent(text.transform.parent, false);
 
-        // Put the box just before the text in the hierarchy so it is drawn behind it
         go.transform.SetSiblingIndex(text.transform.GetSiblingIndex());
 
         TextBackdrop backdrop = go.AddComponent<TextBackdrop>();

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Remembers where the player started and can send them back there.
+
 public class PlayerRespawn : MonoBehaviour
 {
     private Vector3 startPosition;

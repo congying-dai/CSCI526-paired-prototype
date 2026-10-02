@@ -1,13 +1,6 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
-
-// Haunted castle in a storm: dimmed scene, random lightning flashes, falling rain and a
-// flickering torch around the player.
-//
-// It creates itself automatically when the scene starts, so no Unity setup is needed.
-// To tweak the values, add this component to an empty GameObject in the scene yourself
-// (an existing one is used instead of creating a new one).
 public class Atmosphere : MonoBehaviour
 {
     [Header("Ambient light")]
@@ -45,9 +38,6 @@ public class Atmosphere : MonoBehaviour
     private Transform[] drops;
     private float[] dropSpeedFactor;
     private const float DropSlant = 0.25f;
-
-    // Creates the atmosphere automatically unless one was already placed in the scene.
-    //[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void AutoCreate()
     {
         if (FindFirstObjectByType<Atmosphere>() == null)
@@ -110,9 +100,6 @@ public class Atmosphere : MonoBehaviour
             UpdateRain();
         }
     }
-
-    // ---------- Lightning ----------
-
     private IEnumerator LightningRoutine()
     {
         while (true)
@@ -139,8 +126,6 @@ public class Atmosphere : MonoBehaviour
             SetLight(darkness);
         }
     }
-
-    // Sound travels slower than light, so the thunder arrives a moment after the flash
     private IEnumerator ThunderAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -157,8 +142,6 @@ public class Atmosphere : MonoBehaviour
     {
         globalLight.intensity = baseIntensity * multiplier;
     }
-
-    // ---------- Player torch ----------
 
     private void CreateTorch()
     {
@@ -181,8 +164,6 @@ public class Atmosphere : MonoBehaviour
         float scale = Mathf.Max(player.transform.lossyScale.x, 0.01f);
         torch.pointLightOuterRadius = torchRadius / scale;
     }
-
-    // ---------- Rain ----------
 
     private void CreateRain()
     {
@@ -230,8 +211,6 @@ public class Atmosphere : MonoBehaviour
 
             pos.y -= fall;
             pos.x += fall * DropSlant;
-
-            // Wrap back to the top when leaving the screen
             if (pos.y < view.yMin - 0.5f)
             {
                 pos.y = view.yMax + 0.5f;
@@ -265,7 +244,6 @@ public class Atmosphere : MonoBehaviour
 
     private void OnDestroy()
     {
-        // Leave the global light as we found it
         if (globalLight != null)
         {
             globalLight.intensity = baseIntensity;

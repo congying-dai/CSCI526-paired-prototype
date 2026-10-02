@@ -1,9 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-
-// Runtime visual effects for mystery boxes (no art assets needed).
-// Good result: golden sparkles float up. Bad result: red burst, dark debris and a camera shake.
 public class MysteryBoxEffects : MonoBehaviour
 {
     public static void PlayGood(Vector3 position, string message)
@@ -38,8 +35,6 @@ public class MysteryBoxEffects : MonoBehaviour
     {
         StartCoroutine(BadRoutine());
     }
-
-    // Floating world-space text that rises above the box and fades out.
     private void ShowText(string message, Color color)
     {
         GameObject go = new GameObject("MysteryBoxText");
@@ -56,8 +51,6 @@ public class MysteryBoxEffects : MonoBehaviour
         text.outlineColor = Color.black;
         text.sortingOrder = 40;
         text.rectTransform.sizeDelta = new Vector2(8f, 2f);
-
-        // Dark box behind the text so it is readable on any background
         text.ForceMeshUpdate();
         Bounds bounds = text.textBounds;
 
@@ -75,8 +68,6 @@ public class MysteryBoxEffects : MonoBehaviour
     }
 
     private static Sprite boxSprite;
-
-    // A 1x1 white square, centred, exactly 1 world unit wide
     private static Sprite GetBoxSprite()
     {
         if (boxSprite == null)
@@ -100,7 +91,7 @@ public class MysteryBoxEffects : MonoBehaviour
         {
             float p = time / life;
             text.transform.position = start + Vector3.up * p * 0.8f;
-            // Stay fully visible for the first half, then fade
+            
             float fade = Mathf.Clamp01(2f * (1f - p));
             text.color = new Color(color.r, color.g, color.b, fade);
             box.color = new Color(0.04f, 0.04f, 0.1f, 0.8f * fade);
@@ -113,10 +104,9 @@ public class MysteryBoxEffects : MonoBehaviour
     {
         Color[] colors = { new Color(1f, 0.9f, 0.3f), Color.white, new Color(0.5f, 1f, 0.6f) };
 
-        // Glow ring
+        
         SpawnParticle(Vector2.zero, new Color(1f, 0.9f, 0.3f, 0.5f), 0.3f, 2.2f, 0.5f, 0f);
 
-        // Sparkles that burst out, drift upward and fade
         for (int i = 0; i < 24; i++)
         {
             Vector2 dir = Random.insideUnitCircle.normalized * Random.Range(0.8f, 2.5f);
@@ -131,10 +121,9 @@ public class MysteryBoxEffects : MonoBehaviour
 
     private IEnumerator BadRoutine()
     {
-        // Red shock ring
         SpawnParticle(Vector2.zero, new Color(0.9f, 0.05f, 0.05f, 0.7f), 0.3f, 3f, 0.45f, 0f);
 
-        // Dark red / black debris thrown outward, pulled down a bit
+        
         for (int i = 0; i < 28; i++)
         {
             Vector2 dir = Random.insideUnitCircle.normalized * Random.Range(1.5f, 4f);

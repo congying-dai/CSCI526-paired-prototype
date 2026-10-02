@@ -41,7 +41,7 @@ public class Damageable : MonoBehaviour
             return;
         }
 
-        // Prevent duplicate rewards
+
         if (hasBeenDestroyed)
         {
             return;

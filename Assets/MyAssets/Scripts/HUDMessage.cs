@@ -1,8 +1,6 @@
 using TMPro;
 using UnityEngine;
 
-// Shows short on-screen messages ("Ghost Mode!", "Speed boost!", ...).
-// Put one in the scene and assign a TMP_Text. If there is none, messages only go to the console.
 public class HUDMessage : MonoBehaviour
 {
     [Tooltip("The text used to display messages.")]
